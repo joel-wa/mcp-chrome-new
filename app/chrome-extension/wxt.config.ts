@@ -49,7 +49,6 @@ export default defineConfig({
       {
         resources: [
           '/models/*', // 允许访问 public/models/ 下的所有文件
-          '/workers/*', // 允许访问 workers 文件
         ],
         matches: ['<all_urls>'],
       },
@@ -71,10 +70,6 @@ export default defineConfig({
           {
             src: 'inject-scripts/*.js',
             dest: 'inject-scripts',
-          },
-          {
-            src: ['workers/*'],
-            dest: 'workers',
           },
           {
             src: '_locales/**/*',

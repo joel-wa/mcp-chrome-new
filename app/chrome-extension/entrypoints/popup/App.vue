@@ -66,97 +66,16 @@
       </div>
 
       <div class="section">
-        <h2 class="section-title">{{ getMessage('semanticEngineLabel') }}</h2>
-        <div class="semantic-engine-card">
-          <div class="semantic-engine-status">
-            <div class="status-info">
-              <span :class="['status-dot', getSemanticEngineStatusClass()]"></span>
-              <span class="status-text">{{ getSemanticEngineStatusText() }}</span>
-            </div>
-            <div v-if="semanticEngineLastUpdated" class="status-timestamp">
-              {{ getMessage('lastUpdatedLabel') }}
-              {{ new Date(semanticEngineLastUpdated).toLocaleTimeString() }}
-            </div>
-          </div>
-
-          <ProgressIndicator
-            v-if="isSemanticEngineInitializing"
-            :visible="isSemanticEngineInitializing"
-            :text="semanticEngineInitProgress"
-            :showSpinner="true"
-          />
-
-          <button
-            class="semantic-engine-button"
-            :disabled="isSemanticEngineInitializing"
-            @click="initializeSemanticEngine"
-          >
-            <BoltIcon />
-            <span>{{ getSemanticEngineButtonText() }}</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="section">
         <h2 class="section-title">{{ getMessage('embeddingModelLabel') }}</h2>
-
-        <ProgressIndicator
-          v-if="isModelSwitching || isModelDownloading"
-          :visible="isModelSwitching || isModelDownloading"
-          :text="getProgressText()"
-          :showSpinner="true"
-        />
-        <div v-if="modelInitializationStatus === 'error'" class="error-card">
-          <div class="error-content">
-            <div class="error-icon">⚠️</div>
-            <div class="error-details">
-              <p class="error-title">{{ getMessage('semanticEngineInitFailedStatus') }}</p>
-              <p class="error-message">{{
-                modelErrorMessage || getMessage('semanticEngineInitFailedStatus')
-              }}</p>
-              <p class="error-suggestion">{{ getErrorTypeText() }}</p>
-            </div>
-          </div>
-          <button
-            class="retry-button"
-            @click="retryModelInitialization"
-            :disabled="isModelSwitching || isModelDownloading"
-          >
-            <span>🔄</span>
-            <span>{{ getMessage('retryButton') }}</span>
-          </button>
-        </div>
-
-        <div class="model-list">
-          <div
-            v-for="model in availableModels"
-            :key="model.preset"
-            :class="[
-              'model-card',
-              {
-                selected: currentModel === model.preset,
-                disabled: isModelSwitching || isModelDownloading,
-              },
-            ]"
-            @click="
-              !isModelSwitching && !isModelDownloading && switchModel(model.preset as ModelPreset)
-            "
-          >
-            <div class="model-header">
-              <div class="model-info">
-                <p class="model-name" :class="{ 'selected-text': currentModel === model.preset }">
-                  {{ model.preset }}
-                </p>
-                <p class="model-description">{{ getModelDescription(model) }}</p>
-              </div>
-              <div v-if="currentModel === model.preset" class="check-icon">
-                <CheckIcon class="text-white" />
-              </div>
-            </div>
-            <div class="model-tags">
-              <span class="model-tag performance">{{ getPerformanceText(model.performance) }}</span>
-              <span class="model-tag size">{{ model.size }}</span>
-              <span class="model-tag dimension">{{ model.dimension }}D</span>
+        <div class="info-card">
+          <div class="info-content">
+            <div class="info-icon">ℹ️</div>
+            <div class="info-details">
+              <p class="info-title">Semantic Engine Removed</p>
+              <p class="info-message"
+                >The semantic similarity engine and embedding model functionality has been removed
+                from this version.</p
+              >
             </div>
           </div>
         </div>
@@ -194,16 +113,6 @@
             </div>
             <p class="stats-value">{{ getActiveTabsCount() }}</p>
           </div>
-
-          <div class="stats-card">
-            <div class="stats-header">
-              <p class="stats-label">{{ getMessage('vectorDocumentsLabel') }}</p>
-              <span class="stats-icon green">
-                <VectorIcon />
-              </span>
-            </div>
-            <p class="stats-value">{{ storageStats?.totalDocuments || 0 }}</p>
-          </div>
         </div>
         <ProgressIndicator
           v-if="isClearingData && clearDataProgress"
@@ -218,17 +127,25 @@
           @click="showClearConfirmation = true"
         >
           <TrashIcon />
-          <span>{{ isClearingData ? getMessage('clearingStatus') : getMessage('clearAllDataButton') }}</span>
+          <span>{{
+            isClearingData ? getMessage('clearingStatus') : getMessage('clearAllDataButton')
+          }}</span>
         </button>
       </div>
 
       <!-- Model Cache Management Section -->
-      <ModelCacheManagement
-        :cache-stats="cacheStats"
-        :is-managing-cache="isManagingCache"
-        @cleanup-cache="cleanupCache"
-        @clear-all-cache="clearAllCache"
-      />
+      <div class="section">
+        <h2 class="section-title">Model Cache</h2>
+        <div class="info-card">
+          <div class="info-content">
+            <div class="info-icon">ℹ️</div>
+            <div class="info-details">
+              <p class="info-title">Cache Management Removed</p>
+              <p class="info-message">Model cache management functionality has been removed.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="footer">
@@ -258,14 +175,6 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
-import {
-  PREDEFINED_MODELS,
-  type ModelPreset,
-  getModelInfo,
-  getCacheStats,
-  clearModelCache,
-  cleanupModelCache,
-} from '@/utils/semantic-similarity-engine';
 import { BACKGROUND_MESSAGE_TYPES } from '@/common/message-types';
 import { getMessage } from '@/utils/i18n';
 
@@ -281,6 +190,47 @@ import {
   TabIcon,
   VectorIcon,
 } from './components/icons';
+
+// Stub types and functions for removed semantic engine
+type ModelPreset = 'multilingual-e5-small' | 'multilingual-e5-base';
+
+const PREDEFINED_MODELS = {
+  'multilingual-e5-small': {
+    modelIdentifier: 'Xenova/multilingual-e5-small',
+    dimension: 384,
+    description: 'Multilingual E5 Small',
+    performance: 'fast',
+    size: '116MB',
+  },
+  'multilingual-e5-base': {
+    modelIdentifier: 'Xenova/multilingual-e5-base',
+    dimension: 768,
+    description: 'Multilingual E5 Base',
+    performance: 'balanced',
+    size: '279MB',
+  },
+};
+
+const getModelInfo = (modelPreset: ModelPreset) => {
+  return PREDEFINED_MODELS[modelPreset] || PREDEFINED_MODELS['multilingual-e5-small'];
+};
+
+const getCacheStats = async () => {
+  return {
+    totalSize: 0,
+    totalSizeMB: 0,
+    entryCount: 0,
+    entries: [],
+  };
+};
+
+const clearModelCache = async () => {
+  console.log('Model cache functionality removed');
+};
+
+const cleanupModelCache = async () => {
+  console.log('Model cache functionality removed');
+};
 
 const nativeConnectionStatus = ref<'unknown' | 'connected' | 'disconnected'>('unknown');
 const isConnecting = ref(false);
@@ -315,18 +265,6 @@ const mcpConfigJson = computed(() => {
 });
 
 const currentModel = ref<ModelPreset | null>(null);
-const isModelSwitching = ref(false);
-const modelSwitchProgress = ref('');
-
-const modelDownloadProgress = ref<number>(0);
-const isModelDownloading = ref(false);
-const modelInitializationStatus = ref<'idle' | 'downloading' | 'initializing' | 'ready' | 'error'>(
-  'idle',
-);
-const modelErrorMessage = ref<string>('');
-const modelErrorType = ref<'network' | 'file' | 'unknown' | ''>('');
-
-const selectedVersion = ref<'quantized'>('quantized');
 
 const storageStats = ref<{
   indexedPages: number;
@@ -339,27 +277,6 @@ const isRefreshingStats = ref(false);
 const isClearingData = ref(false);
 const showClearConfirmation = ref(false);
 const clearDataProgress = ref('');
-
-const semanticEngineStatus = ref<'idle' | 'initializing' | 'ready' | 'error'>('idle');
-const isSemanticEngineInitializing = ref(false);
-const semanticEngineInitProgress = ref('');
-const semanticEngineLastUpdated = ref<number | null>(null);
-
-// Cache management
-const isManagingCache = ref(false);
-const cacheStats = ref<{
-  totalSize: number;
-  totalSizeMB: number;
-  entryCount: number;
-  entries: Array<{
-    url: string;
-    size: number;
-    sizeMB: number;
-    timestamp: number;
-    age: string;
-    expired: boolean;
-  }>;
-} | null>(null);
 
 const availableModels = computed(() => {
   return Object.entries(PREDEFINED_MODELS).map(([key, value]) => ({
@@ -385,7 +302,9 @@ const getStatusClass = () => {
 const getStatusText = () => {
   if (nativeConnectionStatus.value === 'connected') {
     if (serverStatus.value.isRunning) {
-      return getMessage('serviceRunningStatus', [(serverStatus.value.port || 'Unknown').toString()]);
+      return getMessage('serviceRunningStatus', [
+        (serverStatus.value.port || 'Unknown').toString(),
+      ]);
     } else {
       return getMessage('connectedServiceNotStartedStatus');
     }
@@ -394,12 +313,6 @@ const getStatusText = () => {
   } else {
     return getMessage('detectingStatus');
   }
-};
-
-const formatIndexSize = () => {
-  if (!storageStats.value?.indexSize) return '0 MB';
-  const sizeInMB = Math.round(storageStats.value.indexSize / (1024 * 1024));
-  return `${sizeInMB} MB`;
 };
 
 const getModelDescription = (model: any) => {
@@ -413,123 +326,14 @@ const getModelDescription = (model: any) => {
   }
 };
 
-const getPerformanceText = (performance: string) => {
-  switch (performance) {
-    case 'fast':
-      return getMessage('fastPerformance');
-    case 'balanced':
-      return getMessage('balancedPerformance');
-    case 'accurate':
-      return getMessage('accuratePerformance');
-    default:
-      return performance;
-  }
-};
-
-const getSemanticEngineStatusText = () => {
-  switch (semanticEngineStatus.value) {
-    case 'ready':
-      return getMessage('semanticEngineReadyStatus');
-    case 'initializing':
-      return getMessage('semanticEngineInitializingStatus');
-    case 'error':
-      return getMessage('semanticEngineInitFailedStatus');
-    case 'idle':
-    default:
-      return getMessage('semanticEngineNotInitStatus');
-  }
-};
-
-const getSemanticEngineStatusClass = () => {
-  switch (semanticEngineStatus.value) {
-    case 'ready':
-      return 'bg-emerald-500';
-    case 'initializing':
-      return 'bg-yellow-500';
-    case 'error':
-      return 'bg-red-500';
-    case 'idle':
-    default:
-      return 'bg-gray-500';
-  }
+const formatIndexSize = () => {
+  if (!storageStats.value?.indexSize) return '0 MB';
+  const sizeInMB = Math.round(storageStats.value.indexSize / (1024 * 1024));
+  return `${sizeInMB} MB`;
 };
 
 const getActiveTabsCount = () => {
   return storageStats.value?.totalTabs || 0;
-};
-
-const getProgressText = () => {
-  if (isModelDownloading.value) {
-    return getMessage('downloadingModelStatus', [modelDownloadProgress.value.toString()]);
-  } else if (isModelSwitching.value) {
-    return modelSwitchProgress.value || getMessage('switchingModelStatus');
-  }
-  return '';
-};
-
-const getErrorTypeText = () => {
-  switch (modelErrorType.value) {
-    case 'network':
-      return getMessage('networkErrorMessage');
-    case 'file':
-      return getMessage('modelCorruptedErrorMessage');
-    case 'unknown':
-    default:
-      return getMessage('unknownErrorMessage');
-  }
-};
-
-const getSemanticEngineButtonText = () => {
-  switch (semanticEngineStatus.value) {
-    case 'ready':
-      return getMessage('reinitializeButton');
-    case 'initializing':
-      return getMessage('initializingStatus');
-    case 'error':
-      return getMessage('reinitializeButton');
-    case 'idle':
-    default:
-      return getMessage('initSemanticEngineButton');
-  }
-};
-
-const loadCacheStats = async () => {
-  try {
-    cacheStats.value = await getCacheStats();
-  } catch (error) {
-    console.error('Failed to get cache stats:', error);
-    cacheStats.value = null;
-  }
-};
-
-const cleanupCache = async () => {
-  if (isManagingCache.value) return;
-
-  isManagingCache.value = true;
-  try {
-    await cleanupModelCache();
-    // Refresh cache stats
-    await loadCacheStats();
-  } catch (error) {
-    console.error('Failed to cleanup cache:', error);
-  } finally {
-    isManagingCache.value = false;
-  }
-};
-
-const clearAllCache = async () => {
-  if (isManagingCache.value) return;
-
-  isManagingCache.value = true;
-  try {
-    await clearModelCache();
-    // Refresh cache stats
-    await loadCacheStats();
-  } catch (error) {
-    console.error('Failed to clear cache:', error);
-  } finally {
-    isManagingCache.value = false;
-  }
 };
 
 const saveSemanticEngineState = async () => {
@@ -1825,6 +1629,44 @@ onUnmounted(() => {
 .retry-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.info-card {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.info-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.info-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.info-details {
+  flex: 1;
+}
+
+.info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0369a1;
+  margin: 0 0 4px 0;
+}
+
+.info-message {
+  font-size: 14px;
+  color: #075985;
+  margin: 0;
+  font-weight: 500;
 }
 .danger-button {
   width: 100%;

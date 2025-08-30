@@ -66,17 +66,7 @@ export async function handleClearAllData(): Promise<{ success: boolean; error?: 
       // Continue with other cleanup operations
     }
 
-    // 2. Clear all VectorDatabase data
-    try {
-      const { clearAllVectorData } = await import('@/utils/vector-database');
-      await clearAllVectorData();
-      console.log('Storage: Vector database data cleared successfully');
-    } catch (vectorError) {
-      console.warn('Background: Failed to clear vector data:', vectorError);
-      // Continue with other cleanup operations
-    }
-
-    // 3. Clear related data in chrome.storage (preserve model preferences)
+    // 2. Clear related data in chrome.storage (preserve model preferences)
     try {
       const keysToRemove = ['vectorDatabaseStats', 'lastCleanupTime', 'contentIndexerStats'];
       await chrome.storage.local.remove(keysToRemove);

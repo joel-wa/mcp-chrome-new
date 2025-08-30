@@ -157,78 +157,6 @@ graph TB
       │◄──────────────────┤                      │                   │
 ```
 
-### AI Processing Flow
-
-```
-┌─────────────┐    ┌──────────────┐    ┌─────────────────┐    ┌──────────────┐
-│ Content     │    │ Text Chunker │    │ Semantic Engine │    │ Vector DB    │
-│ Extraction  │    │              │    │                 │    │              │
-└─────┬───────┘    └──────┬───────┘    └─────────┬───────┘    └──────┬───────┘
-      │                   │                      │                   │
-      │ 1. Raw Content    │                      │                   │
-      ├──────────────────►│                      │                   │
-      │                   │ 2. Text Chunks      │                   │
-      │                   ├─────────────────────►│                   │
-      │                   │                      │ 3. Embeddings     │
-      │                   │                      ├──────────────────►│
-      │                   │                      │                   │
-      │                   │ 4. Search Query     │                   │
-      │                   ├─────────────────────►│                   │
-      │                   │                      │ 5. Query Vector   │
-      │                   │                      ├──────────────────►│
-      │                   │                      │ 6. Similar Docs   │
-      │                   │                      │◄──────────────────┤
-      │                   │ 7. Search Results   │                   │
-      │                   │◄─────────────────────┤                   │
-```
-
-## 🧠 AI Integration
-
-### Semantic Similarity Engine
-
-**Architecture**:
-
-- **Model Support**: BGE-small-en-v1.5, E5-small-v2, Universal Sentence Encoder
-- **Execution Context**: Web Workers for non-blocking processing
-- **Optimization**: SIMD acceleration for vector operations
-- **Caching**: LRU cache for embeddings and tokenization
-
-**Performance Optimizations**:
-
-```typescript
-// SIMD-accelerated cosine similarity
-const similarity = await simdMath.cosineSimilarity(vecA, vecB);
-
-// Batch processing for efficiency
-const similarities = await simdMath.batchSimilarity(vectors, query, dimension);
-
-// Memory-efficient matrix operations
-const matrix = await simdMath.similarityMatrix(vectorsA, vectorsB, dimension);
-```
-
-### Vector Database (hnswlib-wasm)
-
-**Features**:
-
-- **Algorithm**: Hierarchical Navigable Small World (HNSW)
-- **Implementation**: WebAssembly for near-native performance
-- **Persistence**: IndexedDB storage with automatic cleanup
-- **Scalability**: Handles 10,000+ documents efficiently
-
-**Configuration**:
-
-```typescript
-const config: VectorDatabaseConfig = {
-  dimension: 384, // Model embedding dimension
-  maxElements: 10000, // Maximum documents
-  efConstruction: 200, // Build-time accuracy
-  M: 16, // Connectivity parameter
-  efSearch: 100, // Search-time accuracy
-  enableAutoCleanup: true, // Automatic old data removal
-  maxRetentionDays: 30, // Data retention period
-};
-```
-
 ## ⚡ Performance Optimizations
 
 ### 1. SIMD Acceleration
@@ -305,4 +233,4 @@ fn cosine_similarity_simd(&self, vec_a: &[f32], vec_b: &[f32]) -> f32 {
 3. **Authentication** for secure connections
 4. **Monitoring** for performance metrics
 
-This architecture enables Chrome MCP Server to deliver high-performance browser automation with advanced AI capabilities while maintaining security and extensibility.
+This architecture enables Chrome MCP Server to deliver high-performance browser automation while maintaining security and extensibility.
