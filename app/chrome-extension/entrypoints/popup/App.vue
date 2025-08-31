@@ -180,7 +180,6 @@ import { getMessage } from '@/utils/i18n';
 
 import ConfirmDialog from './components/ConfirmDialog.vue';
 import ProgressIndicator from './components/ProgressIndicator.vue';
-import ModelCacheManagement from './components/ModelCacheManagement.vue';
 import {
   DocumentIcon,
   DatabaseIcon,

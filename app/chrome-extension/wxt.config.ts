@@ -75,6 +75,10 @@ export default defineConfig({
             src: '_locales/**/*',
             dest: '_locales',
           },
+          {
+            src: '_locales/en/messages.json',
+            dest: '_locales',
+          },
         ],
       }) as any,
     ],
