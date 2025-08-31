@@ -232,6 +232,17 @@ const cleanupModelCache = async () => {
   console.log('Model cache functionality removed');
 };
 
+const loadCacheStats = async () => {
+  console.log('Cache stats functionality removed');
+  // Return empty cache stats since functionality was removed
+  return {
+    totalSize: 0,
+    totalSizeMB: 0,
+    entryCount: 0,
+    entries: [],
+  };
+};
+
 const nativeConnectionStatus = ref<'unknown' | 'connected' | 'disconnected'>('unknown');
 const isConnecting = ref(false);
 const nativeServerPort = ref<number>(12306);
@@ -265,6 +276,22 @@ const mcpConfigJson = computed(() => {
 });
 
 const currentModel = ref<ModelPreset | null>(null);
+const selectedVersion = ref<'full' | 'quantized' | 'compressed'>('quantized');
+
+// Model-related reactive variables (stubs for removed functionality)
+const modelInitializationStatus = ref<'idle' | 'downloading' | 'ready' | 'error'>('idle');
+const modelDownloadProgress = ref<number>(0);
+const isModelDownloading = ref<boolean>(false);
+const isModelSwitching = ref<boolean>(false);
+const modelSwitchProgress = ref<string>('');
+const modelErrorMessage = ref<string>('');
+const modelErrorType = ref<string>('');
+
+// Semantic engine reactive variables (stubs for removed functionality)
+const semanticEngineStatus = ref<'idle' | 'initializing' | 'ready' | 'error'>('idle');
+const isSemanticEngineInitializing = ref<boolean>(false);
+const semanticEngineInitProgress = ref<string>('');
+const semanticEngineLastUpdated = ref<number>(Date.now());
 
 const storageStats = ref<{
   indexedPages: number;
